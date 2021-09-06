@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 #TODO
 #envoy_cc_binary(
@@ -13,4 +13,11 @@ load("@rules_cc//cc:defs.bzl", "cc_binary")
 cc_binary(
     name = "envoy-static",
     srcs = ["main.cc"],
+    deps = ["envoy-library"],
+)
+
+cc_library(
+    name = "envoy-library",
+    srcs = ["http_filter.cc"],
+    hdrs = ["http_filter.h"]
 )
