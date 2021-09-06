@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
     //Foo f;
     //int x = f.GetAge();
 
-    std::string text = "relative paths";
+    std::string text = "new build";
 
     std::cout << text << std::endl;
     return 0;
