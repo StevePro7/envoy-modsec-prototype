@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv) {
 
-    std::string text = "Steven Boland";
+    std::string text = "Suzenne Boland";
 
     std::cout << text << std::endl;
     return 0;
