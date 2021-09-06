@@ -1,0 +1,64 @@
+package(default_visibility = ["//visibility:public"])
+
+load(
+    "@envoy//bazel:envoy_build_system.bzl",
+    "envoy_cc_binary",
+    "envoy_cc_library",
+    "envoy_cc_test",
+)
+
+alias(
+    name = "envoy",
+    actual = ":envoy-static.stripped",
+)
+
+envoy_cc_binary(
+    name = "envoy-static",
+
+    # Note - this really adds those as dynamic dependencies, this forces our docker image to have these libraries installed
+    linkopts = [
+        "-lyajl",
+        "-ldl",
+        "-lpcre",
+        "-lxml2",
+        "-lGeoIP",
+    ] + select({
+        # macOS organization of libevent is different from Windows/Linux.
+        # Including libevent_core is a requirement on those platforms, but
+        # results in duplicate symbols when built on macOS.
+        # See https://github.com/lyft/envoy-mobile/issues/677 for details.
+        "@envoy//bazel:apple": [
+            "-pagezero_size 10000",
+            "-image_base 100000000",
+            "-L/usr/local/lib/",
+            "-L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib",
+            "-lfuzzy",
+            "-llua5.4",
+        ],
+        "//conditions:default": [
+            "-pthread",
+            "-lrt",
+            "-ldl",
+            "-Wl,-z,relro,-z,now",
+            "-Wl,--hash-style=gnu",
+        ],
+    }) + select({
+        "@envoy//bazel:boringssl_fips": [],
+        "@envoy//bazel:windows_x86_64": [],
+        "//conditions:default": ["-pie"],
+    }),
+    repository = "@envoy",
+    deps = [
+        ":libmodsecurity",
+        "//http-filter-modsecurity:http_filter_config",
+        "//http-filter-modsecurity:http_filter_lib",
+        "@envoy//source/exe:envoy_main_entry_lib",
+    ],
+)
+
+cc_import(
+    name = "libmodsecurity",
+    hdrs = glob(["modsecurity/include/**"]),
+    static_library = "modsecurity/libmodsecurity.a",
+    visibility = ["//visibility:public"],
+)
