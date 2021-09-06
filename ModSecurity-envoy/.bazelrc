@@ -1,0 +1,2 @@
+import /home/stevepro/GitHubX/tigera4/envoy-modsec-prototype/ModSecurity-envoy/ModSecurity-envoy/envoy/.bazelrc
+build --workspace_status_command=/home/stevepro/GitHubX/tigera4/envoy-modsec-prototype/ModSecurity-envoy/ModSecurity-envoy/envoy/bazel/get_workspace_status
