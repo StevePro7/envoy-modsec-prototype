@@ -5,7 +5,7 @@ necessary to write or modify Bazel `BUILD` files. In general, each directory has
 a `BUILD` file covering the source files contained immediately in the directory.
 
 Some guidelines for defining new targets using the [custom Envoy build
-rules](../bazel/envoy_build_system.bzl) are provided below. The [Bazel BUILD
+rules](envoy_build_system.bzl) are provided below. The [Bazel BUILD
 Encyclopedia](https://bazel.build/versions/master/docs/be/overview.html)
 provides further details regarding the underlying rules.
 
